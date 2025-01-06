@@ -13,6 +13,17 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+<div class="row">
+    <div class="col-12 text-right">
+        <form method="get" asp-action="Index" class="d-inline-block">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search by Employee Name" name="searchTerm" value="@ViewContext.HttpContext.Request.Query["searchTerm"]" />
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>

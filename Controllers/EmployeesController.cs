@@ -15,11 +15,16 @@ namespace Employee_Management_System.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTerm)
         {
-            var employee = await _context.Employees.Include(x=>x.Department).ToListAsync();
+            var employees = _context.Employees.Include(e => e.Department).AsQueryable();
 
-            return View(employee);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                employees = employees.Where(e => e.Name.Contains(searchTerm));
+            }
+
+            return View(employees.ToList());
         }
 
         public IActionResult Create()
