@@ -135,25 +135,16 @@ namespace Employee_Management_System.Controllers
 
             var employee = await _context.Employees
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _context.Employees.Remove(employee);
-            }
-
+            _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Employee deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 
