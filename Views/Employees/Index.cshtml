@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee_Management_System.Data.Employee>
+﻿@model Employee_Management_System.ViewModel.EmployeeListViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 
 <div class="row">
@@ -27,17 +27,17 @@
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.Phone)</th>
-            <th>@Html.DisplayNameFor(model => model.Position)</th>
-            <th>@Html.DisplayNameFor(model => model.JoiningDate)</th>
-            <th>@Html.DisplayNameFor(model => model.Department.DepartmentName)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().Phone)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().Position)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().JoiningDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Employees.First().Department.DepartmentName)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Employees)
         {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
@@ -47,8 +47,8 @@
                 <td>@Html.DisplayFor(modelItem => item.JoiningDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }
@@ -68,3 +68,28 @@
         });
     </script>
 }
+
+<!-- Pagination Controls -->
+<div class="pagination justify-content-center">
+    @if (Model.PagingInfo.CurrentPage > 1)
+    {
+        <a class="page-link" asp-action="Index" asp-route-pageNumber="1" asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]">First</a>
+        <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.PagingInfo.CurrentPage - 1" asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]">Previous</a>
+    }
+
+    @for (var paginationPage = 1; paginationPage <= Model.PagingInfo.TotalPages; paginationPage++)
+    {
+        <a class="page-link @(paginationPage == Model.PagingInfo.CurrentPage ? "active" : "")"
+           asp-action="Index"
+           asp-route-pageNumber="@paginationPage"
+           asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]">
+            @paginationPage
+        </a>
+    }
+
+    @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
+    {
+        <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.PagingInfo.CurrentPage + 1" asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]">Next</a>
+        <a class="page-link" asp-action="Index" asp-route-pageNumber="@Model.PagingInfo.TotalPages" asp-route-searchTerm="@ViewContext.HttpContext.Request.Query["searchTerm"]">Last</a>
+    }
+</div>

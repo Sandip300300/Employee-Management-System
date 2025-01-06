@@ -1,4 +1,5 @@
 ﻿using Employee_Management_System.Data;
+using Employee_Management_System.Models;
 using Employee_Management_System.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,17 +16,37 @@ namespace Employee_Management_System.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string searchTerm)
+        public async Task<IActionResult> Index(string searchTerm, int pageNumber = 1, int pageSize = 10)
         {
-            var employees = _context.Employees.Include(e => e.Department).AsQueryable();
+            var query = _context.Employees.Include(x=>x.Department).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                employees = employees.Where(e => e.Name.Contains(searchTerm));
+                query = query.Where(e => e.Name.Contains(searchTerm));
             }
 
-            return View(employees.ToList());
+            var totalItems = await query.CountAsync();
+            var employees = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            employees = employees ?? new List<Employee>();
+
+            var viewModel = new EmployeeListViewModel
+            {
+                Employees = employees,
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = pageNumber,
+                    ItemsPerPage = pageSize,
+                    TotalItems = totalItems
+                }
+            };
+
+            return View(viewModel);
         }
+
 
         public IActionResult Create()
         {

@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Employee_Management_System.ViewModel
 {
-    public class EmployeeViewModel
+    public class EmployeeListViewModel
     {
-        public Employee? Employee { get; set; }
-
-        public IEnumerable<SelectListItem>? Departments { get; set; }
-
+        public List<Employee> Employees { get; set; } = new List<Employee>();
+        public PagingInfo PagingInfo { get; set; }
     }
 }
