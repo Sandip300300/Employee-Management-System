@@ -10,5 +10,7 @@ namespace Employee_Management_System.Data
 
         public DbSet<Department> Departments { get; set; }
 
+        public DbSet<PerformanceReview> PerformanceReviews { get; set; }
+
     }
 }

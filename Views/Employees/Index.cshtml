@@ -33,6 +33,7 @@
             <th>@Html.DisplayNameFor(model => model.Employees.First().Position)</th>
             <th>@Html.DisplayNameFor(model => model.Employees.First().JoiningDate)</th>
             <th>@Html.DisplayNameFor(model => model.Employees.First().Department.DepartmentName)</th>
+            <th>Performance Reviews</th>
             <th></th>
         </tr>
     </thead>
@@ -47,6 +48,24 @@
                 <td>@Html.DisplayFor(modelItem => item.JoiningDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
                 <td>
+                    @if (item.PerformanceReviews != null && item.PerformanceReviews.Any())
+                    {
+                        <ul>
+                            @foreach (var review in item.PerformanceReviews)
+                            {
+                                <li>
+                                    <strong>Notes:</strong> @review.ReviewNotes <br />
+                                    <strong>Score:</strong> @review.ReviewScore
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>No reviews available</span>
+                    }
+                </td>
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                 </td>
@@ -58,7 +77,6 @@
 @if (successMessage != null)
 {
     <script>
-        console.log('Success message received!');
         Swal.fire({
             icon: 'success',
             title: 'Deleted!',

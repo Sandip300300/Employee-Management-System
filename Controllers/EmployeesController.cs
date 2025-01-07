@@ -18,7 +18,7 @@ namespace Employee_Management_System.Controllers
 
         public async Task<IActionResult> Index(string searchTerm, int pageNumber = 1, int pageSize = 10)
         {
-            var query = _context.Employees.Include(x=>x.Department).AsQueryable();
+            var query = _context.Employees.Include(x=>x.Department).Include(x=>x.PerformanceReviews).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -167,7 +167,14 @@ namespace Employee_Management_System.Controllers
             {
                 return NotFound();
             }
+            var performanceReviews = await _context.PerformanceReviews
+                .Where(x => x.EmployeeId == id)
+                .ToListAsync();
 
+            if(performanceReviews.Any())
+            {
+                _context.PerformanceReviews.RemoveRange(performanceReviews);
+            }
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
 
