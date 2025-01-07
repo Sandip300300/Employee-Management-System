@@ -76,6 +76,7 @@ namespace Employee_Management_System.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeViewModel viewModel)
         {

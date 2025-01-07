@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Employee_Management_System.Data.Department>
+
+@{
+    ViewData["Title"] = "Index";
+    var successMessage = TempData["SuccessMessage"];
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Budget)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Budget)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (successMessage != null)
+{
+    <script>
+        console.log('Success message received!');
+        Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: '@successMessage',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>
+}
